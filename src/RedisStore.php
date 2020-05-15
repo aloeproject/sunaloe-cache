@@ -78,6 +78,10 @@ class RedisStore implements Store
      */
     private function getHkeyPrefix()
     {
+        if (empty($this->hKeyPrefix)) {
+            return $this->prefix;
+        }
+
         return $this->hKeyPrefix;
     }
 
@@ -241,6 +245,10 @@ class RedisStore implements Store
      */
     public function flush()
     {
+        //防止误删
+        if (empty($this->getHkeyPrefix())) {
+            return false;
+        }
         $key = sprintf($this->getHkeyPrefix() . "*");
         $keys = $this->connection()->keys($key);
         $this->connection()->multi();
