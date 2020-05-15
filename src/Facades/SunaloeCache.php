@@ -8,7 +8,8 @@
 
 namespace Sunaloe\Cache\Facades;
 
-namespace Illuminate\Support\Facades;
+use Illuminate\Support\Facades\Facade;
+
 /**
  * @method static bool has(string $key)
  * @method static mixed get(string $key, mixed $default = null)
