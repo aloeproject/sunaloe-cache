@@ -34,6 +34,8 @@ class RedisStore implements Store
 
     protected $redisConfig;
 
+    protected $isOpenRemember = true;
+
     /**
      * Create a new Redis store.
      *
@@ -50,6 +52,16 @@ class RedisStore implements Store
         $this->setConnection($connection);
     }
 
+    /**
+     * remember 是否走缓存 默认为走
+     * @param bool $isOpen
+     * @return $this
+     */
+    public function isOpenRemember($isOpen = true)
+    {
+        $this->isOpenRemember = $isOpen;
+        return $this;
+    }
 
     /**
      * @param $key string
@@ -324,6 +336,11 @@ class RedisStore implements Store
      */
     public function remember($key, $minutes, Closure $callback)
     {
+        if ($this->isOpenRemember == false) {
+            $value = $callback();
+            return $value;
+        }
+
         $value = $this->get($key);
 
         // If the item exists in the cache we will just return this immediately and if
@@ -347,6 +364,11 @@ class RedisStore implements Store
      */
     public function rememberForever($key, Closure $callback)
     {
+        if ($this->isOpenRemember == false) {
+            $value = $callback();
+            return $value;
+        }
+
         $value = $this->get($key);
 
         // If the item exists in the cache we will just return this immediately and if
