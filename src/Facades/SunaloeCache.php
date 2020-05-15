@@ -34,6 +34,6 @@ class SunaloeCache extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'sunale-cache';
+        return 'sunaloe-cache';
     }
 }
