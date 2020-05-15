@@ -209,7 +209,17 @@ class RedisStore implements Store
      */
     public function forget($key)
     {
-        return (bool)$this->connection()->hdel($this->getHkeyPrefix(), [$key]);
+        return (bool)$this->connection()->hdel($this->getHkeyPrefix(), $key);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @return bool
+     */
+    public function delete()
+    {
+        return (bool)$this->connection()->del([$this->getHkeyPrefix()]);
     }
 
     /**
