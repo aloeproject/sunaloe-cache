@@ -32,6 +32,8 @@ class RedisStore implements Store
 
     protected $hKeyPrefix;
 
+    protected $redisConfig;
+
     /**
      * Create a new Redis store.
      *
@@ -40,10 +42,11 @@ class RedisStore implements Store
      * @param  string $connection
      * @return void
      */
-    public function __construct(Redis $redis, $prefix = '', $connection = 'default')
+    public function __construct(Redis $redis, $prefix = '', $connection = 'default', $redisConfig = [])
     {
         $this->redis = $redis;
         $this->setPrefix($prefix);
+        $this->redisConfig = $redisConfig;
         $this->setConnection($connection);
     }
 
@@ -75,6 +78,11 @@ class RedisStore implements Store
     public function get($key)
     {
         $value = $this->connection()->hget($this->getHkeyPrefix(), $key);
+
+        $redisClient = $this->redisConfig['client'] ?? '';
+        if ($redisClient == 'phpredis') {
+            return $value !== false ? $this->unserialize($value) : null;
+        }
 
         return !is_null($value) ? $this->unserialize($value) : null;
     }

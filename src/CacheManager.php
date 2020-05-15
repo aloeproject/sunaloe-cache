@@ -132,7 +132,7 @@ class CacheManager implements FactoryContract
 
         $connection = $config['connection'] ?? 'default';
 
-        return $this->repository(new RedisStore($redis, $this->getPrefix($config), $connection));
+        return $this->repository(new RedisStore($redis, $this->getPrefix($config), $connection, $this->app['config']['database']['redis']));
     }
 
 
